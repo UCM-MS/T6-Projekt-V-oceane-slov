@@ -15,9 +15,11 @@ const SPAWN_DISTANCE := 190.0
 
 var active_creature: Fish
 var resolving_answer := false
+var answer_correct := false
 var creatures: Array[Fish] = []
 
-var questions: Array[Array] = []
+var question_pool: Array[Dictionary] = []
+var current_question: Dictionary = {}
 
 var question_index := 0
 var score := 0
@@ -32,9 +34,12 @@ var score := 0
 
 
 func _ready() -> void:
-	for consonant in WordGroups.WORDS:
-		if consonant in WordGroups.selected:
-			questions.append(WordGroups.WORDS[consonant])
+	question_pool = WordGroups.load_questions()
+	if question_pool.is_empty():
+		push_error("Slovník neobsahuje otázky pre zvolené skupiny.")
+		set_physics_process(false)
+		progress.text = "Otázky sa nepodarilo načítať."
+		return
 	for scene in CREATURE_COUNTS:
 		for index in range(CREATURE_COUNTS[scene]):
 			var creature := scene.instantiate() as Fish
@@ -68,7 +73,7 @@ func _place_creature(creature: Fish) -> void:
 
 
 func _update_progress() -> void:
-	progress.text = "Zodpovedané: %d/%d   Body: %d" % [question_index, questions.size(), score]
+	progress.text = "Zodpovedané: %d   Body: %d" % [question_index, score]
 
 
 func _physics_process(delta: float) -> void:
@@ -84,7 +89,11 @@ func _open_question() -> void:
 	set_physics_process(false)
 	shark.cancel_mouse_swim()
 	shark.set_physics_process(false)
-	question_label.text = "Doplň i, í, y alebo ý: %s" % questions[question_index][0]
+	current_question = WordGroups.pick_question(question_pool)
+	question_label.text = "Doplň i, í, y alebo ý: %s" % current_question["prompt"]
+	var hint: String = current_question.get("hint", "")
+	if not hint.is_empty():
+		question_label.text += "\n" + hint
 	answers.show()
 	feedback.hide()
 	continue_button.hide()
@@ -97,26 +106,19 @@ func _show_answer(letter: String) -> void:
 		return
 
 	answers.hide()
-	var entry: Array = questions[question_index]
-	resolving_answer = true
-	quiz.hide()
-	if letter == entry[2]:
-		await _animate_bite(active_creature)
+	var entry := current_question
+	answer_correct = letter == entry["answer"]
+	WordGroups.record_answer(entry["word"], answer_correct)
+	if answer_correct:
 		score += 1
-		feedback.text = "Správne! %s (+1 bod)" % entry[1]
+		feedback.text = "Správne! %s (+1 bod)" % entry["word"]
 	else:
-		await _animate_escape(active_creature)
-		feedback.text = "Nesprávne. Správne slovo je %s." % entry[1]
+		feedback.text = "Nesprávne. Správne slovo je %s." % entry["word"]
 
-	_place_creature(active_creature)
-	active_creature.show()
-	active_creature = null
-	resolving_answer = false
-	quiz.show()
+	feedback.text += "\n" + entry["explanation"]
 	question_index += 1
 	_update_progress()
 	feedback.show()
-	continue_button.text = "Zobraziť výsledok" if question_index == questions.size() else "Pokračovať v plávaní"
 	continue_button.show()
 	continue_button.grab_focus()
 
@@ -181,21 +183,23 @@ func _animate_escape(creature: Fish) -> void:
 
 
 func _continue_swimming() -> void:
-	if question_index == questions.size():
-		question_label.text = "Kolo je hotové"
-		feedback.text = "Výsledok: %d / %d bodov" % [score, questions.size()]
-		continue_button.hide()
-		%Replay.show()
-		%Replay.grab_focus()
+	if resolving_answer or not continue_button.is_visible_in_tree():
 		return
 
+	resolving_answer = true
 	quiz.hide()
+	continue_button.hide()
+	if answer_correct:
+		await _animate_bite(active_creature)
+	else:
+		await _animate_escape(active_creature)
+
+	_place_creature(active_creature)
+	active_creature.show()
+	active_creature = null
+	resolving_answer = false
 	set_physics_process(true)
 	shark.set_physics_process(true)
-
-
-func _replay() -> void:
-	get_tree().reload_current_scene()
 
 
 func _input(event: InputEvent) -> void:

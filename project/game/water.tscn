@@ -132,9 +132,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -210.0
+offset_left = -270.0
 offset_top = -95.0
-offset_right = 210.0
+offset_right = 270.0
 offset_bottom = 95.0
 
 [node name="Margin" type="MarginContainer" parent="Quiz/Shade/Panel"]
@@ -148,6 +148,7 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="Question" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
+autowrap_mode = 3
 unique_name_in_owner = true
 horizontal_alignment = 1
 
@@ -173,6 +174,7 @@ custom_minimum_size = Vector2(80, 40)
 text = "ý"
 
 [node name="Feedback" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
+autowrap_mode = 3
 unique_name_in_owner = true
 visible = false
 horizontal_alignment = 1
@@ -181,11 +183,6 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 visible = false
 text = "Pokračovať v plávaní"
-
-[node name="Replay" type="Button" parent="Quiz/Shade/Panel/Margin/Content"]
-unique_name_in_owner = true
-visible = false
-text = "Hrať znova"
 
 [node name="Navigation" type="CanvasLayer" parent="."]
 layer = 3
@@ -203,6 +200,5 @@ text = "Späť do menu"
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerI" to="." method="_show_answer" binds= ["i"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerY" to="." method="_show_answer" binds= ["y"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Continue" to="." method="_continue_swimming"]
-[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Replay" to="." method="_replay"]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/ILong" to="." method="_show_answer" binds= ["í"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/YLong" to="." method="_show_answer" binds= ["ý"]]

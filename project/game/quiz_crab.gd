@@ -1,6 +1,5 @@
 extends "res://quiz_fish.gd"
 
-var floor_profile: PackedVector2Array
 var leg_phase := 0.0
 
 func _ready() -> void:
@@ -9,13 +8,8 @@ func _ready() -> void:
 	escape_message = "Krab ušiel. Pozri si správny tvar."
 
 func place_on_floor(x: float) -> void:
-	position.x = x
-	for index in floor_profile.size() - 1:
-		var start := floor_profile[index]
-		var end := floor_profile[index + 1]
-		if end.x > start.x and x >= start.x and x <= end.x:
-			position.y = lerpf(start.y, end.y, (x - start.x) / (end.x - start.x)) - 12.0
-			return
+	position = Vector2(x, DiveGeometry.floor_y(floor_profile, x) - 12.0)
+
 
 func swim(delta: float, bounds: Rect2) -> void:
 	var next_x := position.x + velocity.x * delta

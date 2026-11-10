@@ -1,7 +1,10 @@
 extends Node2D
 
+const DiveGeometry = preload("res://dive_geometry.gd")
 const SwimFacing = preload("res://swim_facing.gd")
 
+var floor_profile := PackedVector2Array()
+var floor_clearance := 24.0
 var escape_message := "Ryba ušla. Pozri si správny tvar."
 var facing := SwimFacing.new(-1.0)
 var facing_direction := Vector2.LEFT
@@ -26,11 +29,16 @@ func _move_swimmer(delta: float, bounds: Rect2) -> void:
 	var next_position := position + velocity * delta
 	if next_position.x <= bounds.position.x or next_position.x >= bounds.end.x:
 		velocity.x = -velocity.x
-	if next_position.y <= bounds.position.y or next_position.y >= bounds.end.y:
+	var floor_limit := swim_floor_y(clampf(next_position.x, bounds.position.x, bounds.end.x), bounds)
+	if next_position.y <= bounds.position.y or next_position.y >= floor_limit:
 		velocity.y = -velocity.y
 
-	position = next_position.clamp(bounds.position, bounds.end)
+	position = next_position.clamp(bounds.position, Vector2(bounds.end.x, floor_limit))
 	facing_direction = velocity
 
 func face_direction(direction: Vector2, delta: float) -> void:
 	transform = facing.update(direction, delta, position, true)
+
+
+func swim_floor_y(x: float, bounds: Rect2) -> float:
+	return clampf(DiveGeometry.floor_y(floor_profile, x) - floor_clearance, bounds.position.y, bounds.end.y)

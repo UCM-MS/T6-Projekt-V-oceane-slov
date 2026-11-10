@@ -10,7 +10,7 @@ const CREATURE_COUNTS := {
 	preload("res://quiz_crab.tscn"): 2,
 	preload("res://quiz_jellyfish.tscn"): 2,
 }
-const SWIM_BOUNDS := Rect2(238.0, 114.0, 1924.0, 516.0)
+const SWIM_BOUNDS := Rect2(238.0, 108.0, 4510.0, 978.0)
 const SPAWN_DISTANCE := 190.0
 
 var active_creature: Fish
@@ -34,6 +34,15 @@ var score := 0
 
 
 func _ready() -> void:
+	var seabed: PackedVector2Array = $Seabed.polygon
+	var roof: PackedVector2Array = $BurrowRoof.polygon
+	for polygon in [seabed, roof]:
+		var collision := CollisionPolygon2D.new()
+		collision.polygon = polygon
+		$Terrain.add_child(collision)
+
+	var swim_floor := seabed.slice(0, 21)
+	swim_floor.append_array(roof.slice(0, 8))
 	question_pool = WordGroups.load_questions()
 	if question_pool.is_empty():
 		push_error("Slovník neobsahuje otázky pre zvolené skupiny.")
@@ -44,8 +53,7 @@ func _ready() -> void:
 		for index in range(CREATURE_COUNTS[scene]):
 			var creature := scene.instantiate() as Fish
 			$Creatures.add_child(creature)
-			if creature is Crab:
-				creature.floor_profile = $Seabed.polygon
+			creature.floor_profile = seabed if creature is Crab else swim_floor
 			creatures.append(creature)
 			_place_creature(creature)
 	_update_progress()
@@ -56,10 +64,8 @@ func _place_creature(creature: Fish) -> void:
 	var candidate := Vector2(far_x, SWIM_BOUNDS.get_center().y)
 	var far_position := candidate
 	for attempt in range(24):
-		candidate = Vector2(
-			randf_range(SWIM_BOUNDS.position.x, SWIM_BOUNDS.end.x),
-			randf_range(SWIM_BOUNDS.position.y, SWIM_BOUNDS.end.y - (22.0 if creature is Jellyfish else 0.0))
-		)
+		var x := randf_range(SWIM_BOUNDS.position.x, SWIM_BOUNDS.end.x)
+		candidate = Vector2(x, randf_range(SWIM_BOUNDS.position.y, creature.swim_floor_y(x, SWIM_BOUNDS)))
 		var distance: float = candidate.distance_to(shark.position)
 		if creature is Crab:
 			distance = absf(candidate.x - shark.position.x)
@@ -69,7 +75,12 @@ func _place_creature(creature: Fish) -> void:
 	if creature is Crab:
 		creature.place_on_floor(far_position.x)
 	else:
-		creature.position = far_position
+		creature.position = _keep_above_floor(creature, far_position)
+
+
+func _keep_above_floor(creature: Fish, point: Vector2) -> Vector2:
+	point.y = minf(point.y, creature.swim_floor_y(point.x, SWIM_BOUNDS))
+	return point
 
 
 func _update_progress() -> void:
@@ -80,6 +91,9 @@ func _physics_process(delta: float) -> void:
 	for creature in creatures:
 		creature.swim(delta, SWIM_BOUNDS)
 		if not shark.airborne and shark.position.distance_squared_to(creature.position) <= ENCOUNTER_DISTANCE * ENCOUNTER_DISTANCE:
+			var sight := PhysicsRayQueryParameters2D.create(shark.position, creature.position, 1)
+			if not get_world_2d().direct_space_state.intersect_ray(sight).is_empty():
+				continue
 			active_creature = creature
 			_open_question()
 			break
@@ -175,7 +189,9 @@ func _animate_escape(creature: Fish) -> void:
 	if creature is Crab:
 		escape.tween_method(creature.place_on_floor, creature.position.x, destination.x, 0.4)
 	else:
-		escape.tween_property(creature, "position", destination, 0.4)
+		escape.tween_method(func(point: Vector2) -> void:
+			creature.position = _keep_above_floor(creature, point)
+		, creature.position, destination, 0.4)
 	escape.tween_property(creature, "modulate:a", 0.0, 0.4)
 	await escape.finished
 	creature.hide()

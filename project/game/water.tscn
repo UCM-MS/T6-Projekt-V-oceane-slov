@@ -3,6 +3,11 @@
 [ext_resource type="Script" path="res://shark.gd" id="1"]
 [ext_resource type="Script" path="res://water.gd" id="2"]
 
+[ext_resource type="PackedScene" path="res://dive_regions.tscn" id="3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_shark"]
+radius = 27.0
+
 [node name="Water" type="Node2D"]
 script = ExtResource("2")
 
@@ -22,7 +27,7 @@ repeat_times = 2
 
 [node name="Silhouette" type="Polygon2D" parent="DistantRidge"]
 color = Color(0.065, 0.23, 0.33, 1)
-polygon = PackedVector2Array(0, 443, 115, 399, 250, 438, 380, 341, 470, 367, 630, 437, 782, 378, 960, 443, 960, 740, 0, 740)
+polygon = PackedVector2Array(0, 443, 115, 399, 250, 438, 380, 341, 470, 367, 630, 437, 782, 378, 960, 443, 960, 1350, 0, 1350)
 
 [node name="MiddleRidge" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0.45, 0.8)
@@ -31,7 +36,7 @@ repeat_times = 2
 
 [node name="Silhouette" type="Polygon2D" parent="MiddleRidge"]
 color = Color(0.055, 0.18, 0.26, 1)
-polygon = PackedVector2Array(0, 532, 150, 509, 223, 453, 300, 495, 411, 523, 583, 469, 680, 509, 782, 495, 960, 532, 960, 740, 0, 740)
+polygon = PackedVector2Array(0, 532, 150, 509, 223, 453, 300, 495, 411, 523, 583, 469, 680, 509, 782, 495, 960, 532, 960, 1350, 0, 1350)
 
 [node name="NearRidge" type="Parallax2D" parent="."]
 scroll_scale = Vector2(0.75, 0.9)
@@ -40,44 +45,60 @@ repeat_times = 2
 
 [node name="Silhouette" type="Polygon2D" parent="NearRidge"]
 color = Color(0.035, 0.095, 0.14, 1)
-polygon = PackedVector2Array(0, 554, 90, 528, 235, 547, 350, 530, 512, 560, 650, 535, 760, 557, 900, 532, 960, 554, 960, 740, 0, 740)
+polygon = PackedVector2Array(0, 554, 90, 528, 235, 547, 350, 530, 512, 560, 650, 535, 760, 557, 900, 532, 960, 554, 960, 1350, 0, 1350)
 
 [node name="Sky" type="Polygon2D" parent="."]
 color = Color(0.44, 0.69, 0.79, 1)
-polygon = PackedVector2Array(0, -360, 2400, -360, 2400, 66, 0, 66)
+polygon = PackedVector2Array(0, -360, 4800, -360, 4800, 66, 0, 66)
+
+[node name="ShallowLight" type="Polygon2D" parent="."]
+color = Color(0.20, 0.56, 0.61, 0.23)
+polygon = PackedVector2Array(0, 65, 920, 65, 770, 235, 560, 295, 210, 298, 0, 310)
 
 [node name="SurfaceWater" type="Polygon2D" parent="."]
 color = Color(0.11, 0.39, 0.49, 1)
-polygon = PackedVector2Array(0, 65, 120, 60, 240, 65, 360, 58, 480, 64, 600, 60, 720, 66, 840, 60, 960, 64, 1080, 58, 1200, 64, 1320, 60, 1440, 66, 1560, 60, 1680, 64, 1800, 58, 1920, 64, 2040, 60, 2160, 66, 2280, 60, 2400, 65, 2400, 105, 0, 105)
+polygon = PackedVector2Array(0, 64, 120, 59, 240, 65, 360, 60, 480, 66, 600, 64, 720, 59, 840, 65, 960, 60, 1080, 66, 1200, 64, 1320, 59, 1440, 65, 1560, 60, 1680, 66, 1800, 64, 1920, 59, 2040, 65, 2160, 60, 2280, 66, 2400, 64, 2520, 59, 2640, 65, 2760, 60, 2880, 66, 3000, 64, 3120, 59, 3240, 65, 3360, 60, 3480, 66, 3600, 64, 3720, 59, 3840, 65, 3960, 60, 4080, 66, 4200, 64, 4320, 59, 4440, 65, 4560, 60, 4680, 66, 4800, 64, 4800, 105, 0, 105)
+
+[node name="BurrowShadow" type="Polygon2D" parent="."]
+color = Color(0.025, 0.078, 0.115, 1)
+polygon = PackedVector2Array(3840, 1009, 3910, 884, 3960, 824, 4160, 767, 4470, 806, 4625, 940, 4495, 1060, 4100, 1100)
 
 [node name="Seabed" type="Polygon2D" parent="."]
-color = Color(0.26, 0.25, 0.21, 1)
-polygon = PackedVector2Array(0, 694, 160, 682, 320, 680, 500, 690, 680, 681, 860, 685, 1030, 680, 1230, 689, 1400, 680, 1600, 685, 1790, 680, 2000, 689, 2200, 681, 2400, 691, 2400, 740, 0, 740)
+color = Color(0.23, 0.25, 0.22, 1)
+polygon = PackedVector2Array(0, 220, 220, 222, 405, 206, 560, 230, 735, 308, 920, 435, 1100, 550, 1290, 638, 1470, 620, 1670, 670, 1860, 746, 2030, 716, 2190, 798, 2400, 872, 2600, 888, 2790, 913, 2980, 886, 3180, 942, 3380, 916, 3560, 971, 3720, 1018, 3890, 1050, 4090, 1058, 4270, 1044, 4450, 994, 4540, 877, 4670, 782, 4800, 748, 4800, 1120, 0, 1120)
 
 [node name="SandShelf" type="Polygon2D" parent="."]
-color = Color(0.38, 0.34, 0.25, 1)
-polygon = PackedVector2Array(0, 694, 160, 682, 320, 680, 500, 690, 680, 681, 860, 685, 1030, 680, 1230, 689, 1400, 680, 1600, 685, 1790, 680, 2000, 689, 2200, 681, 2400, 691, 2400, 706, 2160, 695, 2000, 702, 1810, 694, 1600, 698, 1380, 695, 1230, 703, 1030, 693, 840, 701, 650, 696, 490, 705, 320, 693, 140, 697, 0, 708)
+color = Color(0.42, 0.38, 0.27, 1)
+polygon = PackedVector2Array(0, 220, 220, 222, 405, 206, 560, 230, 735, 308, 920, 435, 1100, 550, 1290, 638, 1470, 620, 1670, 670, 1860, 746, 2030, 716, 2190, 798, 2400, 872, 2600, 888, 2790, 913, 2980, 886, 3180, 942, 3380, 916, 3560, 971, 3720, 1018, 3890, 1050, 4090, 1058, 4270, 1044, 4450, 994, 4540, 877, 4670, 782, 4800, 748, 4800, 770, 4670, 807, 4540, 911, 4450, 1016, 4270, 1069, 4090, 1092, 3890, 1072, 3720, 1043, 3560, 1005, 3380, 938, 3180, 967, 2980, 920, 2790, 935, 2600, 913, 2400, 906, 2190, 820, 2030, 741, 1860, 780, 1670, 692, 1470, 645, 1290, 672, 1100, 572, 920, 460, 735, 342, 560, 252, 405, 231, 220, 256, 0, 242)
+
+[node name="ShallowSand" type="Polygon2D" parent="."]
+color = Color(0.55, 0.52, 0.36, 1)
+polygon = PackedVector2Array(0, 220, 220, 222, 405, 206, 560, 230, 735, 308, 920, 435, 1100, 550, 1290, 638, 1290, 663, 1100, 575, 920, 460, 735, 333, 560, 255, 405, 231, 220, 247, 0, 245)
+
+[node name="BurrowRoof" type="Polygon2D" parent="."]
+color = Color(0.25, 0.31, 0.34, 1)
+polygon = PackedVector2Array(3920, 808, 3970, 758, 4060, 721, 4180, 730, 4340, 690, 4530, 725, 4670, 738, 4800, 742, 4800, 901, 4620, 903, 4490, 881, 4350, 848, 4220, 835, 4110, 857, 4000, 842, 3940, 846)
+
+[node name="BurrowRoofRidge" type="Polygon2D" parent="."]
+color = Color(0.34, 0.39, 0.39, 1)
+polygon = PackedVector2Array(3920, 808, 3970, 758, 4060, 721, 4180, 730, 4340, 690, 4530, 725, 4670, 738, 4800, 742, 4800, 767, 4660, 770, 4520, 752, 4345, 718, 4170, 760, 4070, 750, 3984, 782, 3940, 824)
 
 [node name="LeftCliff" type="Polygon2D" parent="."]
-color = Color(0.21, 0.24, 0.26, 1)
-polygon = PackedVector2Array(0, 0, 124, 0, 147, 40, 128, 104, 172, 196, 150, 275, 184, 349, 153, 420, 170, 504, 145, 576, 190, 653, 177, 740, 0, 740)
+color = Color(0.21, 0.28, 0.30, 1)
+polygon = PackedVector2Array(0, 0, 128, 0, 155, 69, 130, 113, 182, 174, 164, 256, 0, 270)
 
 [node name="LeftCliffFace" type="Polygon2D" parent="."]
-color = Color(0.33, 0.37, 0.38, 1)
-polygon = PackedVector2Array(0, 0, 124, 0, 147, 40, 128, 104, 91, 136, 104, 244, 69, 318, 88, 443, 50, 533, 73, 653, 0, 696)
-
-[node name="RightCliff" type="Polygon2D" parent="."]
-color = Color(0.21, 0.24, 0.26, 1)
-polygon = PackedVector2Array(2400, 0, 2290, 0, 2250, 50, 2262, 104, 2232, 186, 2255, 266, 2219, 347, 2244, 433, 2227, 510, 2252, 593, 2210, 656, 2223, 740, 2400, 740)
-
-[node name="RightCliffFace" type="Polygon2D" parent="."]
-color = Color(0.34, 0.37, 0.38, 1)
-polygon = PackedVector2Array(2400, 0, 2290, 0, 2250, 50, 2262, 104, 2318, 142, 2296, 251, 2337, 341, 2301, 474, 2340, 568, 2315, 661, 2400, 705)
+color = Color(0.34, 0.42, 0.43, 1)
+polygon = PackedVector2Array(0, 0, 128, 0, 155, 69, 120, 93, 88, 129, 104, 178, 0, 205)
 
 [node name="Waterline" type="Line2D" parent="."]
-points = PackedVector2Array(147, 64, 240, 65, 360, 58, 480, 64, 600, 60, 720, 66, 840, 60, 960, 64, 1080, 58, 1200, 64, 1320, 60, 1440, 66, 1560, 60, 1680, 64, 1800, 58, 1920, 64, 2040, 60, 2160, 66, 2250, 62)
+points = PackedVector2Array(0, 64, 120, 59, 240, 65, 360, 60, 480, 66, 600, 64, 720, 59, 840, 65, 960, 60, 1080, 66, 1200, 64, 1320, 59, 1440, 65, 1560, 60, 1680, 66, 1800, 64, 1920, 59, 2040, 65, 2160, 60, 2280, 66, 2400, 64, 2520, 59, 2640, 65, 2760, 60, 2880, 66, 3000, 64, 3120, 59, 3240, 65, 3360, 60, 3480, 66, 3600, 64, 3720, 59, 3840, 65, 3960, 60, 4080, 66, 4200, 64, 4320, 59, 4440, 65, 4560, 60, 4680, 66, 4800, 64)
 width = 3.0
 default_color = Color(0.59, 0.87, 0.88, 1)
+
+[node name="Terrain" type="StaticBody2D" parent="."]
+
+[node name="DiveRegions" parent="." instance=ExtResource("3")]
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -95,9 +116,13 @@ offset_top = 6.0
 offset_right = -16.0
 horizontal_alignment = 2
 
-[node name="Shark" type="Node2D" parent="."]
-position = Vector2(480, 270)
+[node name="Shark" type="CharacterBody2D" parent="."]
+collision_layer = 0
+position = Vector2(480, 130)
 script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shark"]
+shape = SubResource("CircleShape2D_shark")
 
 [node name="Visual" type="Node2D" parent="Shark"]
 
@@ -113,8 +138,8 @@ polygon = PackedVector2Array(-3, 0, 0, -3, 3, 0, 0, 3)
 [node name="Camera2D" type="Camera2D" parent="Shark"]
 limit_left = 0
 limit_top = -120
-limit_right = 2400
-limit_bottom = 740
+limit_right = 4800
+limit_bottom = 1120
 
 [node name="Creatures" type="Node2D" parent="."]
 

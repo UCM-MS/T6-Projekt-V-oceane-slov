@@ -6,6 +6,7 @@ var vertical_speed: float
 func _ready() -> void:
 	velocity = Vector2(0.0, randf_range(12.0, 20.0) * signf(velocity.y))
 	vertical_speed = absf(velocity.y)
+	floor_clearance = 46.0
 	escape_message = "Medúza ušla. Pozri si správny tvar."
 
 func swim(delta: float, bounds: Rect2) -> void:

@@ -1,17 +1,17 @@
-extends Node2D
+extends CharacterBody2D
 
 const SWIM_SPEED := 240.0
 const SWIM_ACCELERATION := 800.0
-const SURFACE_Y := 64.0
+const DiveGeometry = preload("res://dive_geometry.gd")
+const SURFACE_Y := DiveGeometry.SURFACE_Y
 const JUMP_MIN_SPEED := 140.0
 const AIR_GRAVITY := 700.0
 const WaterSplash = preload("res://water_splash.gd")
 const SwimFacing = preload("res://swim_facing.gd")
-const SWIM_BOUNDS := Rect2(238.0, SURFACE_Y, 1924.0, 568.0)
+const SWIM_BOUNDS := DiveGeometry.SWIM_BOUNDS
 const CURSOR_HOLD_MS := 200
 const CURSOR_DRAG_DISTANCE := 8.0
 
-var velocity := Vector2.ZERO
 var airborne := false
 var entry_time := 0.0
 var entry_duration := 0.0
@@ -71,8 +71,12 @@ func _move_in_water(delta: float) -> void:
 		cancel_mouse_swim()
 
 	next_position = next_position.clamp(SWIM_BOUNDS.position, SWIM_BOUNDS.end)
-	var motion := next_position - position
-	position = next_position
+	var previous_position := position
+	var collision := move_and_collide(next_position - position)
+	if collision != null:
+		move_and_collide(collision.get_remainder().slide(collision.get_normal()))
+		velocity = velocity.slide(collision.get_normal())
+	var motion := position - previous_position
 	if not motion.is_zero_approx():
 		last_direction = motion
 

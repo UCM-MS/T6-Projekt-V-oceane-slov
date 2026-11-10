@@ -1,13 +1,13 @@
 extends Node2D
 
 const ENCOUNTER_DISTANCE := 68.0
-const QUESTIONS := [
-	["r_ba", "ryba", "y", Vector2(720, 270)],
-	["l_st", "list", "i", Vector2(760, 410)],
-	["s_r", "syr", "y", Vector2(340, 390)],
-	["m_ska", "miska", "i", Vector2(220, 150)],
-	["jaz_k", "jazyk", "y", Vector2(650, 130)],
+const WordGroups = preload("res://word_groups.gd")
+const FISH_POSITIONS := [
+	Vector2(720, 270), Vector2(760, 410), Vector2(340, 390), Vector2(220, 150),
+	Vector2(650, 130), Vector2(270, 290), Vector2(810, 180),
 ]
+
+var questions: Array[Array] = []
 
 var question_index := 0
 var score := 0
@@ -23,16 +23,19 @@ var score := 0
 
 
 func _ready() -> void:
+	for consonant in WordGroups.WORDS:
+		if consonant in WordGroups.selected:
+			questions.append(WordGroups.WORDS[consonant])
 	_place_fish()
 
 
 func _place_fish() -> void:
-	fish.position = QUESTIONS[question_index][3]
+	fish.position = FISH_POSITIONS[question_index]
 	_update_progress()
 
 
 func _update_progress() -> void:
-	progress.text = "Zodpovedané: %d/%d   Body: %d" % [question_index, QUESTIONS.size(), score]
+	progress.text = "Zodpovedané: %d/%d   Body: %d" % [question_index, questions.size(), score]
 
 
 func _physics_process(_delta: float) -> void:
@@ -41,7 +44,7 @@ func _physics_process(_delta: float) -> void:
 
 	set_physics_process(false)
 	shark.set_physics_process(false)
-	question_label.text = "Doplň i alebo y: %s" % QUESTIONS[question_index][0]
+	question_label.text = "Doplň i, í, y alebo ý: %s" % questions[question_index][0]
 	answers.show()
 	feedback.hide()
 	continue_button.hide()
@@ -54,7 +57,7 @@ func _show_answer(letter: String) -> void:
 		return
 
 	answers.hide()
-	var entry: Array = QUESTIONS[question_index]
+	var entry: Array = questions[question_index]
 	if letter == entry[2]:
 		score += 1
 		feedback.text = "Správne! %s (+1 bod)" % entry[1]
@@ -64,16 +67,16 @@ func _show_answer(letter: String) -> void:
 	question_index += 1
 	_update_progress()
 	feedback.show()
-	continue_button.text = "Zobraziť výsledok" if question_index == QUESTIONS.size() else "Pokračovať v plávaní"
+	continue_button.text = "Zobraziť výsledok" if question_index == questions.size() else "Pokračovať v plávaní"
 	continue_button.show()
 	continue_button.grab_focus()
 
 
 func _continue_swimming() -> void:
-	if question_index == QUESTIONS.size():
+	if question_index == questions.size():
 		fish.hide()
 		question_label.text = "Kolo je hotové"
-		feedback.text = "Výsledok: %d / %d bodov" % [score, QUESTIONS.size()]
+		feedback.text = "Výsledok: %d / %d bodov" % [score, questions.size()]
 		continue_button.hide()
 		%Replay.show()
 		%Replay.grab_focus()
@@ -87,3 +90,13 @@ func _continue_swimming() -> void:
 
 func _replay() -> void:
 	get_tree().reload_current_scene()
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_return_to_menu()
+
+
+func _return_to_menu() -> void:
+	get_tree().change_scene_to_file("res://start.tscn")

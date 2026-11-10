@@ -35,4 +35,63 @@ offset_right = 90.0
 offset_bottom = 104.0
 text = "Vstúpiť do vody"
 
+[node name="SettingsButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = 116.0
+offset_right = 90.0
+offset_bottom = 162.0
+text = "Nastavenia"
+
+[node name="Settings" type="PanelContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -140.0
+offset_right = 200.0
+offset_bottom = 140.0
+
+[node name="Margin" type="MarginContainer" parent="Settings"]
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Content" type="VBoxContainer" parent="Settings/Margin"]
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Heading" type="Label" parent="Settings/Margin/Content"]
+theme_override_font_sizes/font_size = 26
+text = "Nastavenia"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="Settings/Margin/Content"]
+text = "Vybrané slová po spoluhláskach"
+horizontal_alignment = 1
+
+[node name="Groups" type="GridContainer" parent="Settings/Margin/Content"]
+unique_name_in_owner = true
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 20
+columns = 4
+
+[node name="SelectionHint" type="Label" parent="Settings/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+text = "Vyber aspoň jednu spoluhlásku."
+horizontal_alignment = 1
+
+[node name="Done" type="Button" parent="Settings/Margin/Content"]
+unique_name_in_owner = true
+text = "Hotovo"
+
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Settings/Margin/Content/Done" to="." method="_on_done_pressed"]
 [connection signal="pressed" from="DiveButton" to="." method="_on_dive_pressed"]

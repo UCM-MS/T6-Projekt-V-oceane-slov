@@ -91,9 +91,17 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 40)
 text = "i"
 
+[node name="ILong" type="Button" parent="Quiz/Shade/Panel/Margin/Content/Answers"]
+custom_minimum_size = Vector2(80, 40)
+text = "í"
+
 [node name="AnswerY" type="Button" parent="Quiz/Shade/Panel/Margin/Content/Answers"]
 custom_minimum_size = Vector2(80, 40)
 text = "y"
+
+[node name="YLong" type="Button" parent="Quiz/Shade/Panel/Margin/Content/Answers"]
+custom_minimum_size = Vector2(80, 40)
+text = "ý"
 
 [node name="Feedback" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
 unique_name_in_owner = true
@@ -110,7 +118,22 @@ unique_name_in_owner = true
 visible = false
 text = "Hrať znova"
 
+[node name="Navigation" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="MenuButton" type="Button" parent="Navigation"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -52.0
+offset_right = 160.0
+offset_bottom = -12.0
+text = "Späť do menu"
+
+[connection signal="pressed" from="Navigation/MenuButton" to="." method="_return_to_menu"]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerI" to="." method="_show_answer" binds= ["i"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerY" to="." method="_show_answer" binds= ["y"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Continue" to="." method="_continue_swimming"]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Replay" to="." method="_replay"]
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/ILong" to="." method="_show_answer" binds= ["í"]]
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/YLong" to="." method="_show_answer" binds= ["ý"]]

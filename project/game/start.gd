@@ -8,6 +8,7 @@ const WordGroups = preload("res://word_groups.gd")
 
 
 func _ready() -> void:
+	WordGroups.load_selection()
 	for consonant in WordGroups.WORDS:
 		var checkbox := CheckBox.new()
 		checkbox.text = consonant
@@ -35,10 +36,17 @@ func _on_group_toggled(enabled: bool, consonant: String) -> void:
 	else:
 		WordGroups.selected.erase(consonant)
 	done.disabled = WordGroups.selected.is_empty()
+	%SelectionHint.text = "Vyber aspoň jednu spoluhlásku."
 	%SelectionHint.visible = done.disabled
 
 
 func _on_done_pressed() -> void:
+	if WordGroups.save_selection() != OK:
+		%SelectionHint.text = "Výber sa nepodarilo uložiť. Skús to znova."
+		%SelectionHint.show()
+		return
+
+	%SelectionHint.hide()
 	settings.hide()
 	$Title.show()
 	$DiveButton.show()

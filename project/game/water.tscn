@@ -23,6 +23,13 @@ offset_left = 16.0
 offset_top = 6.0
 text = "Plávanie: WASD alebo šípky"
 
+[node name="Progress" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 650.0
+offset_top = 6.0
+offset_right = 944.0
+horizontal_alignment = 2
+
 [node name="Shark" type="Node2D" parent="."]
 position = Vector2(480, 270)
 script = ExtResource("1")
@@ -72,7 +79,7 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="Question" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
-text = "Doplň i alebo y: r_ba"
+unique_name_in_owner = true
 horizontal_alignment = 1
 
 [node name="Answers" type="HBoxContainer" parent="Quiz/Shade/Panel/Margin/Content"]
@@ -98,6 +105,12 @@ unique_name_in_owner = true
 visible = false
 text = "Pokračovať v plávaní"
 
-[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerI" to="." method="_show_answer" binds= [false]]
-[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerY" to="." method="_show_answer" binds= [true]]
+[node name="Replay" type="Button" parent="Quiz/Shade/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+text = "Hrať znova"
+
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerI" to="." method="_show_answer" binds= ["i"]]
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/AnswerY" to="." method="_show_answer" binds= ["y"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Continue" to="." method="_continue_swimming"]
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Replay" to="." method="_replay"]

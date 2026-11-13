@@ -111,7 +111,7 @@ text = "Plávanie: WASD, šípky alebo myš"
 unique_name_in_owner = true
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -294.0
+offset_left = -480.0
 offset_top = 6.0
 offset_right = -16.0
 horizontal_alignment = 2
@@ -161,6 +161,7 @@ offset_left = -270.0
 offset_top = -95.0
 offset_right = 270.0
 offset_bottom = 95.0
+grow_vertical = 2
 
 [node name="Margin" type="MarginContainer" parent="Quiz/Shade/Panel"]
 theme_override_constants/margin_left = 20
@@ -175,6 +176,7 @@ alignment = 1
 [node name="Question" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
 autowrap_mode = 3
 unique_name_in_owner = true
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 
 [node name="Answers" type="HBoxContainer" parent="Quiz/Shade/Panel/Margin/Content"]
@@ -197,6 +199,19 @@ text = "y"
 [node name="YLong" type="Button" parent="Quiz/Shade/Panel/Margin/Content/Answers"]
 custom_minimum_size = Vector2(80, 40)
 text = "ý"
+
+[node name="HintButton" type="Button" parent="Quiz/Shade/Panel/Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 38)
+size_flags_horizontal = 4
+text = "Zobraziť nápovedu"
+
+[node name="HintLabel" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+theme_override_colors/font_color = Color(0.74, 0.9, 0.96, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Feedback" type="Label" parent="Quiz/Shade/Panel/Margin/Content"]
 autowrap_mode = 3
@@ -227,3 +242,4 @@ text = "Späť do menu"
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Continue" to="." method="_continue_swimming"]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/ILong" to="." method="_show_answer" binds= ["í"]]
 [connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/Answers/YLong" to="." method="_show_answer" binds= ["ý"]]
+[connection signal="pressed" from="Quiz/Shade/Panel/Margin/Content/HintButton" to="." method="_reveal_hint"]

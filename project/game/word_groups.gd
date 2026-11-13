@@ -54,10 +54,12 @@ static func pick_question(pool: Array[Dictionary]) -> Dictionary:
 	return pool.pick_random()
 
 
-static func record_answer(word: String, correct: bool) -> void:
+static func record_answer(word: String, correct: bool) -> bool:
 	if not correct:
 		correct_needed[word] = REQUIRED_CORRECT
 	elif correct_needed.has(word):
 		correct_needed[word] -= 1
 		if correct_needed[word] == 0:
 			correct_needed.erase(word)
+			return true
+	return false

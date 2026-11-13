@@ -29,6 +29,8 @@ var score := 0
 @onready var question_label: Label = %Question
 @onready var progress: Label = %Progress
 @onready var answers: HBoxContainer = %Answers
+@onready var hint_button: Button = %HintButton
+@onready var hint_label: Label = %HintLabel
 @onready var feedback: Label = %Feedback
 @onready var continue_button: Button = %Continue
 
@@ -84,7 +86,10 @@ func _keep_above_floor(creature: Fish, point: Vector2) -> Vector2:
 
 
 func _update_progress() -> void:
-	progress.text = "Zodpovedané: %d   Body: %d" % [question_index, score]
+	var accuracy := "—"
+	if question_index > 0:
+		accuracy = ("%.1f" % (100.0 * score / question_index)).replace(".", ",") + " %"
+	progress.text = "Zodpovedané: %d   Body: %d   Úspešnosť: %s" % [question_index, score, accuracy]
 
 
 func _physics_process(delta: float) -> void:
@@ -104,14 +109,20 @@ func _open_question() -> void:
 	shark.cancel_mouse_swim()
 	shark.set_physics_process(false)
 	current_question = WordGroups.pick_question(question_pool)
-	question_label.text = "Doplň i, í, y alebo ý: %s" % current_question["prompt"]
-	var hint: String = current_question.get("hint", "")
-	if not hint.is_empty():
-		question_label.text += "\n" + hint
+	question_label.text = "Doplň i, í, y alebo ý.\n" + current_question["sentence"]
+	hint_label.text = current_question["hint"]
+	hint_label.hide()
+	hint_button.show()
 	answers.show()
 	feedback.hide()
 	continue_button.hide()
 	quiz.show()
+	%AnswerI.grab_focus()
+
+
+func _reveal_hint() -> void:
+	hint_button.hide()
+	hint_label.show()
 	%AnswerI.grab_focus()
 
 
@@ -120,9 +131,11 @@ func _show_answer(letter: String) -> void:
 		return
 
 	answers.hide()
+	hint_button.hide()
+	hint_label.hide()
 	var entry := current_question
 	answer_correct = letter == entry["answer"]
-	WordGroups.record_answer(entry["word"], answer_correct)
+	var mastered := WordGroups.record_answer(entry["word"], answer_correct)
 	if answer_correct:
 		score += 1
 		feedback.text = "Správne! %s (+1 bod)" % entry["word"]
@@ -130,6 +143,8 @@ func _show_answer(letter: String) -> void:
 		feedback.text = "Nesprávne. Správne slovo je %s." % entry["word"]
 
 	feedback.text += "\n" + entry["explanation"]
+	if mastered:
+		feedback.text += "\nSlovo zvládnuté!"
 	question_index += 1
 	_update_progress()
 	feedback.show()

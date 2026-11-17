@@ -9,7 +9,7 @@ const WordGroups = preload("res://word_groups.gd")
 
 func _ready() -> void:
 	WordGroups.load_selection()
-	for consonant in WordGroups.WORDS:
+	for consonant in WordGroups.GROUPS:
 		var checkbox := CheckBox.new()
 		checkbox.text = consonant
 		checkbox.button_pressed = consonant in WordGroups.selected

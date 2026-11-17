@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://quiz_fish.gd" id="1"]
+
+[node name="QuizFish" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Tail" type="Polygon2D" parent="."]
+color = Color(0.88, 0.36, 0.49, 1)
+polygon = PackedVector2Array(18, 0, 38, -15, 38, 15)
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(1, 0.54, 0.62, 1)
+polygon = PackedVector2Array(-26, 0, -16, -12, 0, -17, 17, -10, 26, 0, 17, 10, 0, 17, -16, 12)
+
+[node name="Eye" type="Polygon2D" parent="."]
+color = Color(0.08, 0.12, 0.19, 1)
+polygon = PackedVector2Array(-15, -7, -9, -7, -9, -1, -15, -1)

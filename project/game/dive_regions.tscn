@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[node name="DiveRegions" type="Node2D"]
+
+[node name="Wreck" type="Node2D" parent="."]
+position = Vector2(2500, 883)
+
+[node name="SandFoot" type="Polygon2D" parent="Wreck"]
+color = Color(0.44, 0.38, 0.27, 1)
+polygon = PackedVector2Array(-153, 19, -81, 1, 120, -3, 277, 9, 347, 23, 249, 28, -114, 27)
+
+[node name="FarMast" type="Polygon2D" parent="Wreck"]
+color = Color(0.34, 0.25, 0.19, 1)
+polygon = PackedVector2Array(113, -91, 118, -201, 130, -200, 132, -90)
+
+[node name="BrokenYard" type="Polygon2D" parent="Wreck"]
+color = Color(0.44, 0.32, 0.22, 1)
+polygon = PackedVector2Array(58, -176, 155, -159, 150, -151, 59, -168)
+
+[node name="Rope" type="Polygon2D" parent="Wreck"]
+color = Color(0.57, 0.47, 0.33, 1)
+polygon = PackedVector2Array(120, -185, 122, -181, 45, -94, 40, -93)
+
+[node name="SternCabin" type="Polygon2D" parent="Wreck"]
+color = Color(0.43, 0.31, 0.22, 1)
+polygon = PackedVector2Array(-54, -83, -46, -142, 41, -133, 42, -78)
+
+[node name="CabinWindow" type="Polygon2D" parent="Wreck"]
+color = Color(0.07, 0.18, 0.23, 1)
+polygon = PackedVector2Array(-33, -126, -6, -124, -7, -104, -35, -107)
+
+[node name="Hull" type="Polygon2D" parent="Wreck"]
+color = Color(0.40, 0.27, 0.20, 1)
+polygon = PackedVector2Array(-99, -98, 40, -80, 103, -90, 127, -77, 150, -93, 248, -77, 289, -105, 260, -48, 215, -10, 97, 14, -30, 0, -71, -24)
+
+[node name="HullBand" type="Polygon2D" parent="Wreck"]
+color = Color(0.61, 0.43, 0.28, 1)
+polygon = PackedVector2Array(-95, -91, 40, -73, 104, -83, 127, -70, 151, -86, 250, -69, 279, -90, 269, -73, 249, -59, 152, -75, 127, -59, 101, -72, 39, -61, -90, -79)
+
+[node name="BrokenPlanks" type="Polygon2D" parent="Wreck"]
+color = Color(0.20, 0.22, 0.21, 1)
+polygon = PackedVector2Array(96, -78, 114, -80, 130, -66, 153, -84, 165, -82, 149, -48, 128, -31, 117, -48)
+
+[node name="LowerHull" type="Polygon2D" parent="Wreck"]
+color = Color(0.29, 0.22, 0.18, 1)
+polygon = PackedVector2Array(-70, -29, 35, -22, 120, -9, 216, -21, 253, -43, 215, -10, 97, 14, -30, 0)

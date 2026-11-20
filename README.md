@@ -5,7 +5,7 @@
 ## Čo hra ponúka
 
 - **Voľné plávanie** po testovacej mape s plytčinou, členitým dnom, vrakom lode a skalnou norou, do ktorej sa dá vplávať. Žralok môže vyskočiť nad hladinu a pri dopade spraví šplech.
-- **Sedem morských tvorov** s rôznym pohybom. Ryby plávajú po zakrivených dráhach, kraby chodia po dne a medúzy sa vznášajú hore a dole.
+- **Dvadsať morských tvorov** rozmiestnených po celej mape. V každom z piatich úsekov plávajú dve ryby a jedna medúza a po dne chodí jeden krab.
 - **Pravopisné otázky** sa otvoria, keď žralok dopláva k tvorovi. Po odpovedi hra ukáže správny tvar a vysvetlenie. Po stlačení tlačidla na pokračovanie žralok pri správnej odpovedi tvora zhltne a pri nesprávnej tvor utečie. Potom sa objaví na inom mieste.
 - **Slovník s 289 položkami v JSON-e.** Obsahuje vybrané a príbuzné slová aj slová s mäkkým `i` alebo `í`. Pri dvojiciach ako *byť* a *biť* pomáha významová nápoveda.
 - **Výber skupín v nastaveniach.** Hráč si môže zapnúť skupiny **b, m, p, r, s, v, z**. Výber sa uloží aj po vypnutí hry.

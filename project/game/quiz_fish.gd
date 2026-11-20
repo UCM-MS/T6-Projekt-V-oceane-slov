@@ -4,6 +4,7 @@ const DiveGeometry = preload("res://dive_geometry.gd")
 const SwimFacing = preload("res://swim_facing.gd")
 
 var floor_profile := PackedVector2Array()
+var swim_bounds: Rect2
 var floor_clearance := 24.0
 var escape_message := "Ryba ušla. Pozri si správny tvar."
 var facing := SwimFacing.new(-1.0)

@@ -5,12 +5,13 @@ const WordGroups = preload("res://word_groups.gd")
 const Fish = preload("res://quiz_fish.gd")
 const Crab = preload("res://quiz_crab.gd")
 const Jellyfish = preload("res://quiz_jellyfish.gd")
-const CREATURE_COUNTS := {
-	preload("res://quiz_fish.tscn"): 3,
-	preload("res://quiz_crab.tscn"): 2,
-	preload("res://quiz_jellyfish.tscn"): 2,
+const CREATURES_PER_SECTION := {
+	preload("res://quiz_fish.tscn"): 2,
+	preload("res://quiz_crab.tscn"): 1,
+	preload("res://quiz_jellyfish.tscn"): 1,
 }
 const SWIM_BOUNDS := Rect2(238.0, 108.0, 4510.0, 978.0)
+const ENCOUNTER_SECTIONS := 5
 const SPAWN_DISTANCE := 190.0
 
 var active_creature: Fish
@@ -51,23 +52,29 @@ func _ready() -> void:
 		set_physics_process(false)
 		progress.text = "Otázky sa nepodarilo načítať."
 		return
-	for scene in CREATURE_COUNTS:
-		for index in range(CREATURE_COUNTS[scene]):
-			var creature := scene.instantiate() as Fish
-			$Creatures.add_child(creature)
-			creature.floor_profile = seabed if creature is Crab else swim_floor
-			creatures.append(creature)
-			_place_creature(creature)
+	var section_width := SWIM_BOUNDS.size.x / ENCOUNTER_SECTIONS
+	for section in range(ENCOUNTER_SECTIONS):
+		var bounds := SWIM_BOUNDS
+		bounds.position.x += section_width * section
+		bounds.size.x = section_width
+		for scene in CREATURES_PER_SECTION:
+			for index in range(CREATURES_PER_SECTION[scene]):
+				var creature := scene.instantiate() as Fish
+				creature.swim_bounds = bounds
+				creature.floor_profile = seabed if creature is Crab else swim_floor
+				$Creatures.add_child(creature)
+				creatures.append(creature)
+				_place_creature(creature)
 	_update_progress()
 
 
 func _place_creature(creature: Fish) -> void:
-	var far_x := SWIM_BOUNDS.end.x if shark.position.x < SWIM_BOUNDS.get_center().x else SWIM_BOUNDS.position.x
-	var candidate := Vector2(far_x, SWIM_BOUNDS.get_center().y)
-	var far_position := candidate
+	var bounds := creature.swim_bounds
+	var far_x := bounds.end.x if shark.position.x < bounds.get_center().x else bounds.position.x
+	var far_position := Vector2(far_x, bounds.get_center().y)
 	for attempt in range(24):
-		var x := randf_range(SWIM_BOUNDS.position.x, SWIM_BOUNDS.end.x)
-		candidate = Vector2(x, randf_range(SWIM_BOUNDS.position.y, creature.swim_floor_y(x, SWIM_BOUNDS)))
+		var x := randf_range(bounds.position.x, bounds.end.x)
+		var candidate := Vector2(x, randf_range(bounds.position.y, creature.swim_floor_y(x, bounds)))
 		var distance: float = candidate.distance_to(shark.position)
 		if creature is Crab:
 			distance = absf(candidate.x - shark.position.x)
@@ -81,7 +88,7 @@ func _place_creature(creature: Fish) -> void:
 
 
 func _keep_above_floor(creature: Fish, point: Vector2) -> Vector2:
-	point.y = minf(point.y, creature.swim_floor_y(point.x, SWIM_BOUNDS))
+	point.y = minf(point.y, creature.swim_floor_y(point.x, creature.swim_bounds))
 	return point
 
 
@@ -94,7 +101,7 @@ func _update_progress() -> void:
 
 func _physics_process(delta: float) -> void:
 	for creature in creatures:
-		creature.swim(delta, SWIM_BOUNDS)
+		creature.swim(delta, creature.swim_bounds)
 		if not shark.airborne and shark.position.distance_squared_to(creature.position) <= ENCOUNTER_DISTANCE * ENCOUNTER_DISTANCE:
 			var sight := PhysicsRayQueryParameters2D.create(shark.position, creature.position, 1)
 			if not get_world_2d().direct_space_state.intersect_ray(sight).is_empty():
@@ -185,19 +192,20 @@ func _animate_bite(creature: Fish) -> void:
 
 
 func _animate_escape(creature: Fish) -> void:
+	var bounds := creature.swim_bounds
 	var away: Vector2 = shark.position.direction_to(creature.position)
 	if away.is_zero_approx():
 		away = Vector2.RIGHT
-	var destination := (creature.position + away * 180.0).clamp(SWIM_BOUNDS.position, SWIM_BOUNDS.end)
-	var toward_center_x := 180.0 if creature.position.x < SWIM_BOUNDS.get_center().x else -180.0
-	var toward_center_y := 150.0 if creature.position.y < SWIM_BOUNDS.get_center().y else -150.0
+	var destination := (creature.position + away * 180.0).clamp(bounds.position, bounds.end)
+	var toward_center_x := 180.0 if creature.position.x < bounds.get_center().x else -180.0
+	var toward_center_y := 150.0 if creature.position.y < bounds.get_center().y else -150.0
 	if creature is Crab:
-		destination.x = clampf(creature.position.x + toward_center_x, SWIM_BOUNDS.position.x, SWIM_BOUNDS.end.x)
+		destination.x = clampf(creature.position.x + toward_center_x, bounds.position.x, bounds.end.x)
 	elif creature is Jellyfish:
 		destination.x = creature.position.x
-		destination.y = clampf(creature.position.y + toward_center_y, SWIM_BOUNDS.position.y, SWIM_BOUNDS.end.y - 22.0)
+		destination.y = clampf(creature.position.y + toward_center_y, bounds.position.y, bounds.end.y - 22.0)
 	elif creature.position.distance_to(destination) < 40.0:
-		destination.y = clampf(creature.position.y + toward_center_y, SWIM_BOUNDS.position.y, SWIM_BOUNDS.end.y)
+		destination.y = clampf(creature.position.y + toward_center_y, bounds.position.y, bounds.end.y)
 
 	creature.facing_direction = destination - creature.position
 	var escape := create_tween().set_parallel()

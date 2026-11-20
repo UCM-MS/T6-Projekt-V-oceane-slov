@@ -1,6 +1,5 @@
 extends "res://quiz_fish.gd"
 
-var pulse_phase := 0.0
 var vertical_speed: float
 
 func _ready() -> void:
@@ -18,8 +17,6 @@ func swim(delta: float, bounds: Rect2) -> void:
 	_move_swimmer(delta, jelly_bounds)
 	if velocity.x * sin(course_phase) < 0.0:
 		course_phase = -course_phase
-	pulse_phase += delta * 2.5
-	$Bell.scale = Vector2(1.0 + sin(pulse_phase) * 0.05, 1.0 - sin(pulse_phase) * 0.05)
 
 func face_direction(direction: Vector2, delta: float) -> void:
 	var target_tilt := clampf(direction.x / 30.0, -0.3, 0.3)

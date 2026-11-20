@@ -6,7 +6,8 @@ const Fish = preload("res://quiz_fish.gd")
 const Crab = preload("res://quiz_crab.gd")
 const Jellyfish = preload("res://quiz_jellyfish.gd")
 const CREATURES_PER_SECTION := {
-	preload("res://quiz_fish.tscn"): 2,
+	preload("res://quiz_fish.tscn"): 1,
+	preload("res://quiz_fish_placeholder.tscn"): 1,
 	preload("res://quiz_crab.tscn"): 1,
 	preload("res://quiz_jellyfish.tscn"): 1,
 }

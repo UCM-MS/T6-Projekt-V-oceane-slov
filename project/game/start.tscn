@@ -23,28 +23,46 @@ text = "V oceáne slov"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DiveButton" type="Button" parent="."]
+[node name="Menu" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -90.0
-offset_top = 58.0
-offset_right = 90.0
-offset_bottom = 104.0
+offset_left = -125.0
+offset_top = 36.0
+offset_right = 125.0
+offset_bottom = 254.0
+theme_override_constants/separation = 8
+
+[node name="DiveButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
 text = "Vstúpiť do vody"
 
-[node name="SettingsButton" type="Button" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.0
-offset_top = 116.0
-offset_right = 90.0
-offset_bottom = 162.0
+[node name="LargeMapButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Veľká mapa (WIP)"
+
+[node name="SettingsButton" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
 text = "Nastavenia"
+
+[node name="TileBoundaries" type="CheckButton" parent="Menu"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+tooltip_text = "Zobrazí začiatky a konce dielov vo Veľkej mape (WIP)."
+text = "Hranice dielov mapy"
+
+[node name="MenuHint" type="Label" parent="Menu"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Zmena platí do vypnutia hry."
+horizontal_alignment = 1
 
 [node name="Settings" type="PanelContainer" parent="."]
 visible = false
@@ -92,6 +110,8 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 text = "Hotovo"
 
-[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Menu/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Settings/Margin/Content/Done" to="." method="_on_done_pressed"]
-[connection signal="pressed" from="DiveButton" to="." method="_on_dive_pressed"]
+[connection signal="pressed" from="Menu/DiveButton" to="." method="_on_dive_pressed" binds= ["res://water.tscn"]]
+[connection signal="pressed" from="Menu/LargeMapButton" to="." method="_on_dive_pressed" binds= ["res://large_dive.tscn"]]
+[connection signal="toggled" from="Menu/TileBoundaries" to="." method="_on_tile_boundaries_toggled"]

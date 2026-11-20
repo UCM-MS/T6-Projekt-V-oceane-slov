@@ -1,6 +1,7 @@
 extends Control
 
 const WordGroups = preload("res://word_groups.gd")
+const GameSettings = preload("res://game_settings.gd")
 
 @onready var settings: PanelContainer = $Settings
 @onready var groups: GridContainer = %Groups
@@ -9,23 +10,28 @@ const WordGroups = preload("res://word_groups.gd")
 
 func _ready() -> void:
 	WordGroups.load_selection()
+	var boundaries: CheckButton = $Menu/TileBoundaries
+	boundaries.set_pressed_no_signal(GameSettings.show_tile_boundaries())
 	for consonant in WordGroups.GROUPS:
 		var checkbox := CheckBox.new()
 		checkbox.text = consonant
 		checkbox.button_pressed = consonant in WordGroups.selected
 		checkbox.toggled.connect(_on_group_toggled.bind(consonant))
 		groups.add_child(checkbox)
-	$DiveButton.grab_focus()
+	$Menu/DiveButton.grab_focus()
 
 
-func _on_dive_pressed() -> void:
-	get_tree().change_scene_to_file("res://water.tscn")
+func _on_dive_pressed(scene_path: String) -> void:
+	get_tree().change_scene_to_file(scene_path)
+
+
+func _on_tile_boundaries_toggled(enabled: bool) -> void:
+	%MenuHint.visible = GameSettings.save_tile_boundaries(enabled) != OK
 
 
 func _on_settings_pressed() -> void:
 	$Title.hide()
-	$DiveButton.hide()
-	$SettingsButton.hide()
+	$Menu.hide()
 	settings.show()
 	(groups.get_child(0) as CheckBox).grab_focus()
 
@@ -49,6 +55,5 @@ func _on_done_pressed() -> void:
 	%SelectionHint.hide()
 	settings.hide()
 	$Title.show()
-	$DiveButton.show()
-	$SettingsButton.show()
-	$SettingsButton.grab_focus()
+	$Menu.show()
+	$Menu/SettingsButton.grab_focus()

@@ -1,6 +1,6 @@
 extends RefCounted
 
-const SETTINGS_PATH := "user://settings.cfg"
+const GameSettings = preload("res://game_settings.gd")
 
 const GROUPS: Array[String] = ["b", "m", "p", "r", "s", "v", "z"]
 const WORDS_PATH := "res://selected_words.json"
@@ -12,11 +12,7 @@ static var correct_needed: Dictionary[String, int] = {}
 
 
 static func load_selection() -> void:
-	var config := ConfigFile.new()
-	if config.load(SETTINGS_PATH) != OK:
-		return
-
-	var saved: Variant = config.get_value("quiz", "consonants", [])
+	var saved: Variant = GameSettings.get_value("quiz", "consonants", [])
 	if not saved is Array:
 		return
 
@@ -29,10 +25,7 @@ static func load_selection() -> void:
 
 
 static func save_selection() -> Error:
-	var config := ConfigFile.new()
-	config.load(SETTINGS_PATH)
-	config.set_value("quiz", "consonants", selected)
-	return config.save(SETTINGS_PATH)
+	return GameSettings.set_value("quiz", "consonants", selected)
 
 
 static func load_questions() -> Array[Dictionary]:

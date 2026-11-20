@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="SteepSlope" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(960, 910)
+
+[node name="RockLayers" type="Polygon2D" parent="."]
+color = Color(0.29, 0.39, 0.39, 1)
+polygon = PackedVector2Array(167, 464, 303, 490, 396, 660, 468, 804, 607, 896, 799, 937, 754, 958, 569, 956, 418, 866, 348, 684, 273, 554)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 222, 434, 323, 456, 398, 588, 465, 750, 556, 857, 677, 901, 960, 910)
+width = 7.0
+default_color = Color(0.47, 0.59, 0.52, 1)

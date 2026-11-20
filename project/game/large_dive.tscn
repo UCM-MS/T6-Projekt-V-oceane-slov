@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://dive.tscn" id="1"]
+[ext_resource type="Script" path="res://large_dive.gd" id="2"]
+[ext_resource type="Script" path="res://large_map.gd" id="3"]
+
+[node name="LargeDive" instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="LargeMap" type="Node2D" parent="World"]
+script = ExtResource("3")
+
+[node name="Terrain" type="StaticBody2D" parent="World/LargeMap"]
+
+[node name="Tiles" type="Node2D" parent="World/LargeMap"]
+
+[node name="Grid" type="Node2D" parent="World/LargeMap"]

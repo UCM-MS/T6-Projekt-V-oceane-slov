@@ -10,8 +10,6 @@ const CREATURES_PER_SECTION := {
 	preload("res://quiz_crab.tscn"): 1,
 	preload("res://quiz_jellyfish.tscn"): 1,
 }
-const SWIM_BOUNDS := Rect2(238.0, 108.0, 4510.0, 978.0)
-const ENCOUNTER_SECTIONS := 5
 const SPAWN_DISTANCE := 190.0
 
 var active_creature: Fish
@@ -36,31 +34,23 @@ var score := 0
 @onready var continue_button: Button = %Continue
 
 
-func _ready() -> void:
-	var seabed: PackedVector2Array = $Seabed.polygon
-	var roof: PackedVector2Array = $BurrowRoof.polygon
-	for polygon in [seabed, roof]:
-		var collision := CollisionPolygon2D.new()
-		collision.polygon = polygon
-		$Terrain.add_child(collision)
-
-	var swim_floor := seabed.slice(0, 21)
-	swim_floor.append_array(roof.slice(0, 8))
+func _start_encounters(bounds: Rect2, section_count: int, seabed: PackedVector2Array,
+		swim_floor: PackedVector2Array) -> void:
 	question_pool = WordGroups.load_questions()
 	if question_pool.is_empty():
 		push_error("Slovník neobsahuje otázky pre zvolené skupiny.")
 		set_physics_process(false)
 		progress.text = "Otázky sa nepodarilo načítať."
 		return
-	var section_width := SWIM_BOUNDS.size.x / ENCOUNTER_SECTIONS
-	for section in range(ENCOUNTER_SECTIONS):
-		var bounds := SWIM_BOUNDS
-		bounds.position.x += section_width * section
-		bounds.size.x = section_width
+	var section_width := bounds.size.x / section_count
+	for section in range(section_count):
+		var section_bounds := bounds
+		section_bounds.position.x += section_width * section
+		section_bounds.size.x = section_width
 		for scene in CREATURES_PER_SECTION:
 			for index in range(CREATURES_PER_SECTION[scene]):
 				var creature := scene.instantiate() as Fish
-				creature.swim_bounds = bounds
+				creature.swim_bounds = section_bounds
 				creature.floor_profile = seabed if creature is Crab else swim_floor
 				$Creatures.add_child(creature)
 				creatures.append(creature)

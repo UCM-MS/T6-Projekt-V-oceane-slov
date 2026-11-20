@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[node name="Shelf" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 430)
+
+[node name="Sand" type="Polygon2D" parent="."]
+color = Color(0.43, 0.39, 0.28, 1)
+polygon = PackedVector2Array(0, 430, 82, 407, 196, 416, 288, 375, 393, 395, 480, 430, 480, 467, 393, 440, 288, 421, 196, 464, 82, 448, 0, 467)
+
+[node name="Kelp" type="Line2D" parent="."]
+points = PackedVector2Array(384, 396, 376, 354, 386, 315, 381, 273)
+width = 12.0
+default_color = Color(0.24, 0.47, 0.35, 1)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 82, 407, 196, 416, 288, 375, 393, 395, 480, 430)
+width = 7.0
+default_color = Color(0.59, 0.55, 0.41, 1)

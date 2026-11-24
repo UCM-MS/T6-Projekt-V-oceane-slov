@@ -8,10 +8,10 @@ const JUMP_MIN_SPEED := 140.0
 const AIR_GRAVITY := 700.0
 const WaterSplash = preload("res://water_splash.gd")
 const SwimFacing = preload("res://swim_facing.gd")
-const SWIM_BOUNDS := DiveGeometry.SWIM_BOUNDS
 const CURSOR_HOLD_MS := 200
 const CURSOR_DRAG_DISTANCE := 8.0
 
+var swim_bounds := DiveGeometry.SWIM_BOUNDS
 var airborne := false
 var entry_time := 0.0
 var entry_duration := 0.0
@@ -70,7 +70,7 @@ func _move_in_water(delta: float) -> void:
 	elif has_swim_target and next_position == swim_target and not following_cursor:
 		cancel_mouse_swim()
 
-	next_position = next_position.clamp(SWIM_BOUNDS.position, SWIM_BOUNDS.end)
+	next_position = next_position.clamp(swim_bounds.position, swim_bounds.end)
 	var previous_position := position
 	var collision := move_and_collide(next_position - position)
 	if collision != null:
@@ -84,7 +84,7 @@ func _move_in_water(delta: float) -> void:
 func _move_in_air(delta: float) -> void:
 	velocity.y += AIR_GRAVITY * delta
 	position += velocity * delta
-	position.x = clampf(position.x, SWIM_BOUNDS.position.x, SWIM_BOUNDS.end.x)
+	position.x = clampf(position.x, swim_bounds.position.x, swim_bounds.end.x)
 	last_direction = velocity
 	if position.y >= SURFACE_Y:
 		position.y = SURFACE_Y
@@ -138,7 +138,7 @@ func _set_swim_target(screen_position: Vector2) -> void:
 	if airborne:
 		return
 	var target := get_canvas_transform().affine_inverse() * screen_position
-	swim_target = target.clamp(Vector2(SWIM_BOUNDS.position.x, -120.0), SWIM_BOUNDS.end)
+	swim_target = target.clamp(Vector2(swim_bounds.position.x, -120.0), swim_bounds.end)
 	has_swim_target = true
 
 

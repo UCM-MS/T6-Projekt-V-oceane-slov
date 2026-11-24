@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[node name="CaveTunnel" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 445)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 445)
+
+[node name="Ceiling" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 176, 53, 219, 105, 201, 164, 146, 218, 125, 266, 159, 315, 199, 363, 178, 415, 160, 480, 176)
+
+[node name="Recess" type="Polygon2D" parent="."]
+color = Color(0.105, 0.15, 0.167, 1)
+polygon = PackedVector2Array(6, 337, 49, 314, 116, 326, 168, 277, 228, 242, 289, 261, 351, 300, 403, 274, 459, 305, 478, 346, 425, 363, 342, 370, 264, 330, 192, 325, 123, 392, 49, 413, 11, 385)
+
+[node name="MineralSeam" type="Line2D" parent="."]
+points = PackedVector2Array(113, 342, 168, 298, 198, 295, 222, 273, 261, 278)
+width = 4.0
+default_color = Color(0.21, 0.29, 0.29, 1)
+
+[node name="BranchDivider" type="Polygon2D" parent="."]
+visible = false
+color = Color(0.25, 0.304, 0.309, 1)
+polygon = PackedVector2Array(100, 405, 152, 373, 205, 354, 244, 360, 305, 391, 345, 392, 382, 431, 340, 464, 297, 479, 253, 462, 203, 473, 158, 465, 120, 442)
+
+[node name="Ridge" type="Line2D" parent="BranchDivider"]
+points = PackedVector2Array(100, 405, 152, 373, 205, 354, 244, 360, 305, 391, 345, 392, 382, 431)
+width = 6.0
+default_color = Color(0.37, 0.46, 0.46, 1)
+
+[node name="BranchFloor" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 445, 36, 504, 76, 575, 126, 657, 192, 699, 265, 706, 330, 682, 383, 624, 421, 554, 455, 492, 480, 445)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 445, 45, 464, 96, 436, 160, 352, 219, 333, 271, 362, 325, 408, 380, 399, 434, 372, 480, 445)
+width = 7.0
+default_color = Color(0.385, 0.46, 0.44, 1)

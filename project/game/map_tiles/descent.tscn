@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="Descent" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(960, 910)
+
+[node name="RockLayers" type="Polygon2D" parent="."]
+color = Color(0.27, 0.37, 0.39, 1)
+polygon = PackedVector2Array(104, 522, 245, 640, 413, 684, 512, 824, 686, 900, 878, 958, 706, 958, 471, 887, 389, 749, 226, 713)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 145, 453, 249, 591, 412, 633, 514, 778, 671, 820, 822, 889, 960, 910)
+width = 7.0
+default_color = Color(0.42, 0.55, 0.51, 1)

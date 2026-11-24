@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[node name="Basin" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 430)
+
+[node name="Sand" type="Polygon2D" parent="."]
+color = Color(0.36, 0.35, 0.31, 1)
+polygon = PackedVector2Array(63, 441, 143, 456, 205, 464, 310, 462, 411, 446, 411, 454, 313, 474, 196, 474, 106, 461)
+
+[node name="LowCoral" type="Polygon2D" parent="."]
+color = Color(0.42, 0.39, 0.57, 1)
+polygon = PackedVector2Array(230, 463, 220, 453, 231, 453, 236, 458, 243, 448, 251, 450, 248, 458, 260, 456, 269, 460, 255, 463)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 63, 441, 143, 456, 205, 464, 310, 462, 411, 446, 480, 430)
+width = 7.0
+default_color = Color(0.46, 0.5, 0.47, 1)

@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="Reef" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 430)
+
+[node name="Coral" type="Polygon2D" parent="."]
+color = Color(0.63, 0.37, 0.34, 1)
+polygon = PackedVector2Array(183, 334, 177, 292, 160, 262, 170, 249, 188, 276, 195, 225, 207, 229, 205, 279, 224, 256, 231, 271, 212, 309, 215, 334)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 85, 395, 155, 333, 220, 327, 301, 385, 380, 413, 480, 430)
+width = 7.0
+default_color = Color(0.47, 0.56, 0.47, 1)

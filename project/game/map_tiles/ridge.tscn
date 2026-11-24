@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[node name="Ridge" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 430)
+
+[node name="RockFace" type="Polygon2D" parent="."]
+color = Color(0.28, 0.38, 0.45, 1)
+polygon = PackedVector2Array(114, 372, 176, 262, 239, 240, 265, 320, 286, 368, 439, 432, 373, 441, 216, 422)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 85, 407, 136, 338, 176, 262, 239, 240, 290, 343, 385, 407, 480, 430)
+width = 7.0
+default_color = Color(0.48, 0.55, 0.6, 1)

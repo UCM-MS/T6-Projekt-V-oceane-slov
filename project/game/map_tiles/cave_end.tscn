@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[node name="CaveEnd" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 925)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 430)
+
+[node name="Ceiling" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 656, 72, 632, 150, 607, 224, 612, 291, 623, 355, 651)
+
+[node name="StoneLayers" type="Polygon2D" parent="."]
+color = Color(0.29, 0.347, 0.345, 1)
+polygon = PackedVector2Array(0, 534, 97, 526, 181, 497, 261, 516, 335, 509, 404, 478, 369, 508, 322, 538, 264, 543, 184, 523, 103, 550, 0, 559)
+
+[node name="Floor" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(0, 925, 62, 935, 138, 909, 210, 884, 263, 839, 300, 788, 326, 726, 355, 651, 377, 581, 405, 516, 432, 469, 455, 442, 480, 430)

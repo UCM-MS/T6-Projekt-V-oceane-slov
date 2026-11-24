@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[node name="CaveShaft" type="Node2D"]
+
+[node name="Entry" type="Marker2D" parent="."]
+position = Vector2(0, 430)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(480, 925)
+
+[node name="Crown" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(214, 353, 237, 323, 268, 314, 305, 339, 350, 357, 396, 385, 438, 416, 480, 430)
+
+[node name="Ceiling" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(214, 353, 250, 354, 288, 372, 325, 415, 360, 477, 399, 548, 444, 617, 480, 656)
+
+[node name="RockFace" type="Polygon2D" parent="."]
+color = Color(0.278, 0.334, 0.338, 1)
+polygon = PackedVector2Array(63, 445, 129, 450, 177, 469, 218, 506, 253, 545, 292, 625, 337, 721, 379, 825, 446, 928, 480, 953, 410, 952, 363, 892, 315, 771, 277, 702, 237, 601, 173, 536, 121, 502)
+
+[node name="StoneLayers" type="Polygon2D" parent="."]
+color = Color(0.31, 0.368, 0.363, 1)
+polygon = PackedVector2Array(240, 341, 268, 330, 310, 359, 349, 373, 396, 405, 446, 438, 480, 451, 480, 471, 440, 454, 390, 423, 345, 396, 305, 378, 268, 346)
+
+[node name="MouthRim" type="Line2D" parent="."]
+points = PackedVector2Array(214, 353, 237, 323, 268, 314, 305, 339, 350, 357, 396, 385, 438, 416, 480, 430)
+width = 6.0
+default_color = Color(0.42, 0.51, 0.49, 1)
+
+[node name="EntranceStone" type="Polygon2D" parent="."]
+color = Color(0.35, 0.405, 0.39, 1)
+polygon = PackedVector2Array(172, 446, 190, 439, 212, 452, 228, 485, 212, 502, 183, 480)
+
+[node name="CavePlants" type="Line2D" parent="."]
+points = PackedVector2Array(128, 429, 117, 408, 132, 388, 124, 375)
+width = 7.0
+default_color = Color(0.44, 0.64, 0.46, 1)
+
+[node name="Floor" type="Line2D" parent="."]
+points = PackedVector2Array(0, 430, 66, 425, 125, 430, 172, 446, 214, 475, 258, 506, 302, 575, 340, 650, 380, 744, 420, 830, 456, 905, 480, 925)
+width = 7.0
+default_color = Color(0.385, 0.46, 0.44, 1)

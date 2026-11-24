@@ -26,15 +26,23 @@ var facing := SwimFacing.new()
 var last_direction := Vector2.RIGHT
 
 @onready var visual: Node2D = $Visual
+@onready var mouth: Marker2D = $Visual/Mouth
+@onready var swim_sprite: AnimatedSprite2D = $Visual/Sprite
 
 
 func _physics_process(delta: float) -> void:
+	var previous_position := position
 	if airborne:
 		_move_in_air(delta)
 	else:
 		_move_in_water(delta)
 
 	visual.transform = facing.update(last_direction, delta, Vector2.ZERO)
+	var is_moving := not (position - previous_position).is_zero_approx()
+	if is_moving and not swim_sprite.is_playing():
+		swim_sprite.play()
+	elif not is_moving and swim_sprite.is_playing():
+		swim_sprite.stop()
 	queue_redraw()
 
 
@@ -140,6 +148,12 @@ func _set_swim_target(screen_position: Vector2) -> void:
 	var target := get_canvas_transform().affine_inverse() * screen_position
 	swim_target = target.clamp(Vector2(swim_bounds.position.x, -120.0), swim_bounds.end)
 	has_swim_target = true
+
+
+func pause_swimming() -> void:
+	cancel_mouse_swim()
+	set_physics_process(false)
+	swim_sprite.stop()
 
 
 func cancel_mouse_swim() -> void:

@@ -21,6 +21,9 @@ func _process(delta: float) -> void:
 	if turns_to_motion:
 		face_direction(facing_direction, delta)
 
+func play_swim_animation(animation: StringName) -> void:
+	$Sprite.play(animation)
+
 func swim(delta: float, bounds: Rect2) -> void:
 	course_phase += delta * 0.7
 	velocity = velocity.rotated(sin(course_phase) * 0.3 * delta)

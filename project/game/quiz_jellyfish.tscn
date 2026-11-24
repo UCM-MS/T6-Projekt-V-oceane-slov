@@ -1,17 +1,17 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://quiz_jellyfish.gd" id="1"]
-[ext_resource type="Texture2D" path="res://sprites/jellyfish_01.png" id="2"]
-[ext_resource type="Texture2D" path="res://sprites/jellyfish_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/Jellyfish_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/Jellyfish_2.png" id="3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jellyfish_01"]
 atlas = ExtResource("2")
-region = Rect2(29, 20, 530, 655)
+region = Rect2(28, 0, 536, 690)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jellyfish_02"]
 atlas = ExtResource("3")
-region = Rect2(5, 86, 530, 655)
+region = Rect2(0, 90, 536, 690)
 filter_clip = true
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_jellyfish"]
@@ -37,4 +37,4 @@ scale = Vector2(0.09, 0.09)
 sprite_frames = SubResource("SpriteFrames_jellyfish")
 animation = &"swim"
 autoplay = "swim"
-offset = Vector2(0, 125)
+offset = Vector2(0, 160)

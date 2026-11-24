@@ -5,9 +5,10 @@ const WordGroups = preload("res://word_groups.gd")
 const Fish = preload("res://quiz_fish.gd")
 const Crab = preload("res://quiz_crab.gd")
 const Jellyfish = preload("res://quiz_jellyfish.gd")
+const FISH_SCENE := preload("res://quiz_fish.tscn")
+const FISH_SWIM_ANIMATIONS := [&"angelfish", &"butterflyfish", &"herring"]
 const CREATURES_PER_SECTION := {
-	preload("res://quiz_fish.tscn"): 1,
-	preload("res://quiz_fish_placeholder.tscn"): 1,
+	FISH_SCENE: 2,
 	preload("res://quiz_crab.tscn"): 1,
 	preload("res://quiz_jellyfish.tscn"): 1,
 }
@@ -54,6 +55,8 @@ func _start_encounters(bounds: Rect2, section_count: int, seabed: PackedVector2A
 				creature.swim_bounds = section_bounds
 				creature.floor_profile = seabed if creature is Crab else swim_floor
 				$Creatures.add_child(creature)
+				if scene == FISH_SCENE:
+					creature.play_swim_animation(FISH_SWIM_ANIMATIONS[(section + index) % FISH_SWIM_ANIMATIONS.size()])
 				creatures.append(creature)
 				_place_creature(creature)
 	_update_progress()
@@ -104,8 +107,7 @@ func _physics_process(delta: float) -> void:
 
 func _open_question() -> void:
 	set_physics_process(false)
-	shark.cancel_mouse_swim()
-	shark.set_physics_process(false)
+	shark.pause_swimming()
 	current_question = WordGroups.pick_question(question_pool)
 	question_label.text = "Doplň i, í, y alebo ý.\n" + current_question["sentence"]
 	hint_label.text = current_question["hint"]
@@ -170,7 +172,7 @@ func _animate_bite(creature: Fish) -> void:
 		shark.last_direction = offset
 
 	var lunge := offset * 0.4
-	var mouth: Vector2 = shark.position + lunge + art.transform.basis_xform(Vector2(32.0, 4.0))
+	var mouth := to_local(shark.mouth.global_position) + lunge
 	var bite := create_tween().set_parallel()
 	bite.tween_property(art, "position", lunge, 0.2)
 	bite.tween_property(creature, "position", mouth, 0.2)

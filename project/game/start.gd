@@ -30,7 +30,7 @@ func _on_tile_boundaries_toggled(enabled: bool) -> void:
 
 
 func _on_settings_pressed() -> void:
-	$Title.hide()
+	$Branding.hide()
 	$Menu.hide()
 	settings.show()
 	(groups.get_child(0) as CheckBox).grab_focus()
@@ -54,6 +54,6 @@ func _on_done_pressed() -> void:
 
 	%SelectionHint.hide()
 	settings.hide()
-	$Title.show()
+	$Branding.show()
 	$Menu.show()
 	$Menu/SettingsButton.grab_focus()

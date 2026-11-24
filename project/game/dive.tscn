@@ -2,9 +2,29 @@
 
 [ext_resource type="Script" path="res://shark.gd" id="1"]
 [ext_resource type="Script" path="res://water.gd" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_1.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_2.png" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_3.png" id="5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_shark"]
 radius = 27.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_shark"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5")
+}],
+"loop": true,
+"name": &"swim",
+"speed": 6.0
+}]
 
 [node name="Dive" type="Node2D"]
 script = ExtResource("2")
@@ -73,14 +93,14 @@ shape = SubResource("CircleShape2D_shark")
 
 [node name="Visual" type="Node2D" parent="Shark"]
 
-[node name="Silhouette" type="Polygon2D" parent="Shark/Visual"]
-color = Color(0.46, 0.74, 0.82, 1)
-polygon = PackedVector2Array(47, 0, 30, 11, 8, 15, -2, 24, -11, 13, -30, 6, -49, 17, -42, 0, -49, -17, -30, -6, -12, -13, -20, -30, 4, -17, 27, -12)
+[node name="Sprite" type="AnimatedSprite2D" parent="Shark/Visual"]
+texture_filter = 4
+scale = Vector2(0.055, 0.055)
+sprite_frames = SubResource("SpriteFrames_shark")
+animation = &"swim"
 
-[node name="Eye" type="Polygon2D" parent="Shark/Visual"]
-position = Vector2(29, -4)
-color = Color(0.035, 0.12, 0.18, 1)
-polygon = PackedVector2Array(-3, 0, 0, -3, 3, 0, 0, 3)
+[node name="Mouth" type="Marker2D" parent="Shark/Visual"]
+position = Vector2(47, 3)
 
 [node name="Camera2D" type="Camera2D" parent="Shark"]
 limit_left = 0

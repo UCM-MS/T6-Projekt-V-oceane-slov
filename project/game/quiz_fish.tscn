@@ -1,30 +1,76 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://quiz_fish.gd" id="1"]
-[ext_resource type="Texture2D" path="res://sprites/fish_01.png" id="2"]
-[ext_resource type="Texture2D" path="res://sprites/fish_02.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/Angelfish_1.png" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/Angelfish_2.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/Butterflyfish_1.png" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/Butterflyfish_2.png" id="5"]
+[ext_resource type="Texture2D" path="res://sprites/Herring_1.png" id="6"]
+[ext_resource type="Texture2D" path="res://sprites/Herring_2.png" id="7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fish_01"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_angelfish_1"]
 atlas = ExtResource("2")
-region = Rect2(10, 75, 510, 410)
+region = Rect2(14, 117, 514, 370)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fish_02"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_angelfish_2"]
 atlas = ExtResource("3")
-region = Rect2(5, 87, 510, 410)
+region = Rect2(45, 117, 514, 370)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_butterflyfish_1"]
+atlas = ExtResource("4")
+region = Rect2(19, 48, 510, 424)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_butterflyfish_2"]
+atlas = ExtResource("5")
+region = Rect2(6, 66, 510, 424)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herring_1"]
+atlas = ExtResource("6")
+region = Rect2(62, 95, 500, 235)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_herring_2"]
+atlas = ExtResource("7")
+region = Rect2(55, 95, 500, 235)
 filter_clip = true
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fish"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fish_01")
+"texture": SubResource("AtlasTexture_angelfish_1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fish_02")
+"texture": SubResource("AtlasTexture_angelfish_2")
 }],
 "loop": true,
-"name": &"swim",
+"name": &"angelfish",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_butterflyfish_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_butterflyfish_2")
+}],
+"loop": true,
+"name": &"butterflyfish",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herring_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_herring_2")
+}],
+"loop": true,
+"name": &"herring",
 "speed": 4.0
 }]
 
@@ -35,6 +81,6 @@ script = ExtResource("1")
 texture_filter = 4
 scale = Vector2(0.13, 0.13)
 sprite_frames = SubResource("SpriteFrames_fish")
-animation = &"swim"
-autoplay = "swim"
+animation = &"angelfish"
+autoplay = "angelfish"
 flip_h = true

@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_1.png" id="3"]
 [ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_2.png" id="4"]
 [ext_resource type="Texture2D" path="res://sprites/WhTipReef_Swim_3.png" id="5"]
+[ext_resource type="Script" path="res://minimap.gd" id="6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_shark"]
 radius = 27.0
@@ -82,6 +83,14 @@ offset_left = -480.0
 offset_top = 6.0
 offset_right = -16.0
 horizontal_alignment = 2
+
+[node name="Minimap" type="Control" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("6")
 
 [node name="Shark" type="CharacterBody2D" parent="."]
 collision_layer = 0

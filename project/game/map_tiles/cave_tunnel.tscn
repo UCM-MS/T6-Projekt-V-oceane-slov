@@ -39,3 +39,9 @@ points = PackedVector2Array(0, 445, 36, 504, 76, 575, 126, 657, 192, 699, 265, 7
 points = PackedVector2Array(0, 445, 45, 464, 96, 436, 160, 352, 219, 333, 271, 362, 325, 408, 380, 399, 434, 372, 480, 445)
 width = 7.0
 default_color = Color(0.385, 0.46, 0.44, 1)
+
+[node name="ChestSpot" type="Marker2D" parent="." groups=["spawn_chest"]]
+position = Vector2(240, 345)
+
+[node name="BranchChestSpot" type="Marker2D" parent="." groups=["spawn_chest"]]
+position = Vector2(228, 703)

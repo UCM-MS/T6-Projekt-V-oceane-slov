@@ -20,3 +20,6 @@ polygon = PackedVector2Array(230, 463, 220, 453, 231, 453, 236, 458, 243, 448, 2
 points = PackedVector2Array(0, 430, 63, 441, 143, 456, 205, 464, 310, 462, 411, 446, 480, 430)
 width = 7.0
 default_color = Color(0.46, 0.5, 0.47, 1)
+
+[node name="WreckSpot" type="Marker2D" parent="." groups=["spawn_wreck"]]
+position = Vector2(240, 463)

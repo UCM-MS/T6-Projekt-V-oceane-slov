@@ -16,3 +16,6 @@ polygon = PackedVector2Array(183, 334, 177, 292, 160, 262, 170, 249, 188, 276, 1
 points = PackedVector2Array(0, 430, 85, 395, 155, 333, 220, 327, 301, 385, 380, 413, 480, 430)
 width = 7.0
 default_color = Color(0.47, 0.56, 0.47, 1)
+
+[node name="ChestSpot" type="Marker2D" parent="." groups=["spawn_chest_alt"]]
+position = Vector2(420, 420)

@@ -27,6 +27,14 @@ const CAVE_TUNNEL := preload("res://map_tiles/cave_tunnel.tscn")
 const KELP_BED := preload("res://map_tiles/kelp_bed.tscn")
 const SKY_TOP := -360.0
 const CRAB_CAP_MARGIN := 65.0
+## Spawn markers are Marker2D children of tile scenes, put in one of these groups.
+const SPAWN_WRECK := &"spawn_wreck"
+const SPAWN_CHEST := &"spawn_chest"
+const SPAWN_CHEST_ALT := &"spawn_chest_alt"
+## The wreck should not lie right where the shark starts.
+const MIN_WRECK_X := 3.0 * CELL_SIZE
+## The chest should be a real swim away from the wreck.
+const MIN_QUEST_DISTANCE := 3.0 * CELL_SIZE
 
 class Cave:
 	var interior := PackedVector2Array()
@@ -42,6 +50,11 @@ var caves: Array[Cave] = []
 var crab_blocked_spans: Array[Vector2] = []
 var show_tile_boundaries := false
 var tile_bounds: Array[Rect2] = []
+## Every spawn spot of the generated map, per group: {"position": Vector2, "flip": bool}.
+var spawn_points := {SPAWN_WRECK: [], SPAWN_CHEST: [], SPAWN_CHEST_ALT: []}
+## Spots picked for the treasure hunt; empty when the map has no suitable spot.
+var wreck_spot := {}
+var chest_spot := {}
 
 @onready var grid: Node2D = $Grid
 
@@ -100,8 +113,45 @@ func generate(map_seed: int) -> void:
 	seabed.append(world_bounds.end)
 	seabed.append(Vector2(0.0, world_bounds.end.y))
 	DiveGeometry.add_terrain_collision($Terrain, seabed)
+	_choose_quest_spots(random)
 	queue_redraw()
 	grid.queue_redraw()
+
+
+func _choose_quest_spots(random: RandomNumberGenerator) -> void:
+	var wrecks: Array = spawn_points[SPAWN_WRECK]
+	var far_wrecks := wrecks.filter(func(spot: Dictionary) -> bool:
+		return spot["position"].x >= MIN_WRECK_X
+	)
+	if not far_wrecks.is_empty():
+		wrecks = far_wrecks
+	if wrecks.is_empty():
+		return
+	wreck_spot = wrecks[random.randi_range(0, wrecks.size() - 1)]
+
+	# Prefer a chest hidden in a cave; fall back to open seabed only when needed.
+	var far_from_wreck := func(spot: Dictionary) -> bool:
+		return absf(spot["position"].x - wreck_spot["position"].x) >= MIN_QUEST_DISTANCE
+	var all_chests: Array = spawn_points[SPAWN_CHEST] + spawn_points[SPAWN_CHEST_ALT]
+	for candidates: Array in [spawn_points[SPAWN_CHEST].filter(far_from_wreck),
+			all_chests.filter(far_from_wreck), all_chests]:
+		if not candidates.is_empty():
+			chest_spot = candidates[random.randi_range(0, candidates.size() - 1)]
+			return
+
+
+func _collect_spawn_points(root: Node2D, parent_transform := Transform2D.IDENTITY) -> void:
+	var root_transform := parent_transform * root.transform
+	for child in root.get_children():
+		if not child is Marker2D:
+			continue
+		for group: StringName in spawn_points:
+			if child.is_in_group(group):
+				spawn_points[group].append({
+					"position": root_transform * (child as Marker2D).position,
+					# Mirrored tiles mirror their spawned objects too, so they still fit the floor.
+					"flip": root_transform.x.x < 0.0,
+				})
 
 
 func _choose_cave_stretches(stretch_count: int, random: RandomNumberGenerator) -> Array[int]:
@@ -160,6 +210,7 @@ func _place_tile(tile: Node2D, cell: Vector2i, size: Vector2i, reverse: bool = f
 	tile.transform = Transform2D(Vector2.LEFT if reverse else Vector2.RIGHT, Vector2.DOWN, origin)
 	$Tiles.add_child(tile, true)
 	tile_bounds.append(bounds)
+	_collect_spawn_points(tile)
 
 
 func _append_cave(cell: Vector2i, length: int, plateau: Array[PackedScene],
@@ -239,6 +290,7 @@ func _append_cave_edge(cave: Cave, cell: Vector2i, cover: PackedScene, right: bo
 	if closed:
 		var terrain := cover.instantiate() as Node2D
 		tile.add_child(terrain)
+		_collect_spawn_points(terrain, tile.transform)
 		_append_path(cave.roof, terrain.get_node("Floor"), tile)
 		var cap := tile.transform * ceiling.points[-1]
 		var outer_x := (cell.x + int(right)) * CELL_SIZE
@@ -254,6 +306,8 @@ func _append_cave_tunnel(cave: Cave, cell: Vector2i, cover: PackedScene, branche
 	divider.visible = branched
 	if branched:
 		tunnel.get_node("Floor").points = tunnel.get_node("BranchFloor").points
+	# Keep only the chest spot that lies on the floor actually used by this tunnel.
+	tunnel.get_node("ChestSpot" if branched else "BranchChestSpot").free()
 	_append_floor_tile(tunnel, cell + Vector2i.DOWN, 2 if branched else 1)
 	if branched:
 		DiveGeometry.add_terrain_collision($Terrain, (tunnel.transform * divider.transform) * divider.polygon)

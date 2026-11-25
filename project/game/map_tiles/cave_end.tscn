@@ -19,3 +19,6 @@ polygon = PackedVector2Array(0, 534, 97, 526, 181, 497, 261, 516, 335, 509, 404,
 [node name="Floor" type="Line2D" parent="."]
 visible = false
 points = PackedVector2Array(0, 925, 62, 935, 138, 909, 210, 884, 263, 839, 300, 788, 326, 726, 355, 651, 377, 581, 405, 516, 432, 469, 455, 442, 480, 430)
+
+[node name="ChestSpot" type="Marker2D" parent="." groups=["spawn_chest"]]
+position = Vector2(45, 932)

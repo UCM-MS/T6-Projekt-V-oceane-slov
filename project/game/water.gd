@@ -13,6 +13,7 @@ const CREATURES_PER_SECTION := {
 	preload("res://quiz_jellyfish.tscn"): 1,
 }
 const SPAWN_DISTANCE := 190.0
+const Minimap = preload("res://minimap.gd")
 
 var active_creature: Fish
 var resolving_answer := false
@@ -24,6 +25,12 @@ var current_question: Dictionary = {}
 
 var question_index := 0
 var score := 0
+var bonus_points := 0
+var pearls := 0
+
+## A task of several questions (e.g. the captain's log); empty during normal swimming.
+## Keys: title, item, count, needed, intro, answered, correct, used, on_finish, passed.
+var challenge := {}
 
 @onready var shark = $Shark
 @onready var quiz: CanvasLayer = $Quiz
@@ -34,6 +41,7 @@ var score := 0
 @onready var hint_label: Label = %HintLabel
 @onready var feedback: Label = %Feedback
 @onready var continue_button: Button = %Continue
+@onready var minimap: Minimap = $HUD/Minimap
 
 
 func _start_encounters(bounds: Rect2, section_count: int, seabed: PackedVector2Array,
@@ -90,7 +98,9 @@ func _update_progress() -> void:
 	var accuracy := "—"
 	if question_index > 0:
 		accuracy = ("%.1f" % (100.0 * score / question_index)).replace(".", ",") + " %"
-	progress.text = "Zodpovedané: %d   Body: %d   Úspešnosť: %s" % [question_index, score, accuracy]
+	progress.text = "Zodpovedané: %d   Body: %d   Úspešnosť: %s" % [question_index, score + bonus_points, accuracy]
+	if pearls > 0:
+		progress.text += "   Perly: %d" % pearls
 
 
 func _physics_process(delta: float) -> void:
@@ -108,8 +118,14 @@ func _physics_process(delta: float) -> void:
 func _open_question() -> void:
 	set_physics_process(false)
 	shark.pause_swimming()
-	current_question = WordGroups.pick_question(question_pool)
+	current_question = _pick_question()
 	question_label.text = "Doplň i, í, y alebo ý.\n" + current_question["sentence"]
+	if not challenge.is_empty():
+		var heading := "%s – %s %d/%d" % [challenge["title"], challenge["item"],
+				challenge["answered"] + 1, challenge["count"]]
+		if challenge["answered"] == 0:
+			heading += "\n" + challenge["intro"]
+		question_label.text = heading + "\n\n" + question_label.text
 	hint_label.text = current_question["hint"]
 	hint_label.hide()
 	hint_button.show()
@@ -118,6 +134,46 @@ func _open_question() -> void:
 	continue_button.hide()
 	quiz.show()
 	%AnswerI.grab_focus()
+
+
+func _pick_question() -> Dictionary:
+	if challenge.is_empty():
+		return WordGroups.pick_question(question_pool)
+	# Avoid asking the same word twice within one task.
+	var question := WordGroups.pick_question(question_pool)
+	for attempt in range(10):
+		if not question["word"] in challenge["used"]:
+			break
+		question = WordGroups.pick_question(question_pool)
+	challenge["used"].append(question["word"])
+	return question
+
+
+## Asks several questions in a row; on_finish(passed: bool) -> String is called
+## after the last one and returns the message shown to the player.
+func _start_challenge(config: Dictionary, on_finish: Callable) -> void:
+	challenge = config.duplicate()
+	challenge["answered"] = 0
+	challenge["correct"] = 0
+	challenge["used"] = []
+	challenge["on_finish"] = on_finish
+	_open_question()
+
+
+func _record_challenge_answer() -> void:
+	challenge["answered"] += 1
+	if answer_correct:
+		challenge["correct"] += 1
+	var remaining: int = challenge["count"] - challenge["answered"]
+	var can_still_pass: bool = challenge["correct"] + remaining >= challenge["needed"]
+	if remaining > 0 and can_still_pass:
+		continue_button.text = "Ďalej"
+		return
+	var passed: bool = challenge["correct"] >= challenge["needed"]
+	challenge["passed"] = passed
+	var message: String = challenge["on_finish"].call(passed)
+	feedback.text += "\n\n" + message
+	continue_button.text = "Pokračovať v plávaní"
 
 
 func _reveal_hint() -> void:
@@ -145,6 +201,9 @@ func _show_answer(letter: String) -> void:
 	feedback.text += "\n" + entry["explanation"]
 	if mastered:
 		feedback.text += "\nSlovo zvládnuté!"
+	continue_button.text = "Pokračovať v plávaní"
+	if not challenge.is_empty():
+		_record_challenge_answer()
 	question_index += 1
 	_update_progress()
 	feedback.show()
@@ -216,6 +275,17 @@ func _animate_escape(creature: Fish) -> void:
 
 func _continue_swimming() -> void:
 	if resolving_answer or not continue_button.is_visible_in_tree():
+		return
+
+	if not challenge.is_empty():
+		if not challenge.has("passed"):
+			_open_question()
+			return
+		challenge = {}
+		quiz.hide()
+		continue_button.hide()
+		set_physics_process(true)
+		shark.set_physics_process(true)
 		return
 
 	resolving_answer = true

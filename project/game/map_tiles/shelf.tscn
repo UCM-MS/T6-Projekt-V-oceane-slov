@@ -21,3 +21,6 @@ default_color = Color(0.24, 0.47, 0.35, 1)
 points = PackedVector2Array(0, 430, 82, 407, 196, 416, 288, 375, 393, 395, 480, 430)
 width = 7.0
 default_color = Color(0.59, 0.55, 0.41, 1)
+
+[node name="ChestSpot" type="Marker2D" parent="." groups=["spawn_chest_alt"]]
+position = Vector2(140, 412)
